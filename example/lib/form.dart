@@ -9,17 +9,6 @@ const termsAcceptedKey = "terms_accepted";
 const getUpdatesKey = "get_updates_accepted";
 
 class MyForm with BixatForm {
-  TextEditingController get usernameField =>
-      put(usernameKey, TextEditingController());
-  TextEditingController get fullNameField =>
-      put(fullNameKey, TextEditingController());
-  TextEditingController get passwordField =>
-      put(passwordKey, TextEditingController());
-  ValueNotifier<bool> get termsAcceptedField =>
-      put(termsAcceptedKey, ValueNotifier(false));
-  ValueNotifier<bool> get getUpdatesField =>
-      put(getUpdatesKey, ValueNotifier(false));
-
   @override
   List<String> get optionalFields => [getUpdatesKey];
 
