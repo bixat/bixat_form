@@ -11,7 +11,7 @@ class LoginFormUI extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Login Form')),
+      appBar: AppBar(title: const Text('Register Form')),
       body: Center(
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 600),
@@ -29,6 +29,13 @@ class LoginFormUI extends StatelessWidget {
                   ),
                   const SizedBox(height: 16),
                   TextFormField(
+                    controller: bixatForm.fullNameField,
+                    decoration: const InputDecoration(
+                        labelText: 'Full name', border: OutlineInputBorder()),
+                    onChanged: bixatForm.onChanged,
+                  ),
+                  const SizedBox(height: 16),
+                  TextFormField(
                     controller: bixatForm.passwordField,
                     obscureText: true,
                     decoration: const InputDecoration(
@@ -37,10 +44,24 @@ class LoginFormUI extends StatelessWidget {
                   ),
                   const SizedBox(height: 16),
                   ListenableBuilder(
-                    listenable: bixatForm.termsAcceptedField,
+                    listenable: bixatForm.getUpdatesField,
                     builder: (context, _) {
                       return CheckboxListTile(
                         title: const Text("Get updates (optional)"),
+                        value: bixatForm.getUpdatesField.value,
+                        onChanged: (newValue) {
+                          bixatForm.getUpdatesField.value = newValue!;
+                          bixatForm.onChanged(newValue);
+                        },
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  ListenableBuilder(
+                    listenable: bixatForm.termsAcceptedField,
+                    builder: (context, _) {
+                      return CheckboxListTile(
+                        title: const Text("Accept terms"),
                         value: bixatForm.termsAcceptedField.value,
                         onChanged: (newValue) {
                           bixatForm.termsAcceptedField.value = newValue!;
@@ -58,7 +79,7 @@ class LoginFormUI extends StatelessWidget {
                         child: Text(
                             bixatForm.state.value == BixatFormState.loading
                                 ? 'Loading...'
-                                : 'Login'),
+                                : 'Register'),
                       );
                     },
                   ),
