@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-enum BixatFormState { enabled, loading, disbaled, done }
+enum BixatFormState { enabled, loading, disabled, done }
 
 mixin BixatForm {
   final Map<String, dynamic> _fields = {};
-  final state = ValueNotifier(BixatFormState.disbaled);
-  bool get disabled => BixatFormState.disbaled == state.value;
+  final state = ValueNotifier(BixatFormState.disabled);
+  bool get disabled => BixatFormState.disabled == state.value;
 
   T put<T>(String name, T value) {
     final result = _fields.putIfAbsent(name, () => value);
@@ -23,7 +23,7 @@ mixin BixatForm {
   void onChanged(_) {
     final isValid = _requiredFields.values.where(onValidate).length ==
         _requiredFields.length;
-    state.value = isValid ? BixatFormState.enabled : BixatFormState.disbaled;
+    state.value = isValid ? BixatFormState.enabled : BixatFormState.disabled;
   }
 
   Map<String, dynamic> get _requiredFields => Map.from(_fields)
