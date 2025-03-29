@@ -1,10 +1,9 @@
 import 'package:bixat_form/bixat_form.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 const usernameKey = "username";
 const passwordKey = "password";
-const fullNameKey = "full)_name";
+const fullNameKey = "full_name";
 const termsAcceptedKey = "terms_accepted";
 const getUpdatesKey = "get_updates_accepted";
 
@@ -12,24 +11,24 @@ class MyForm with BixatForm {
   @override
   List<String> get optionalFields => [getUpdatesKey];
 
+  // * Handle your data base on type
   @override
-  bool onValidate(dynamic e) {
-    if (e == null) return false;
-    final bool result = switch (e.runtimeType) {
-      const (TextEditingController) => e.text.isNotEmpty,
-      const (ValueNotifier<bool>) => e.value,
-      _ => true,
+  BixatFormActions? typeToValue(Type type) {
+    final result = switch (type) {
+      const (ValueNotifier<bool>) => BixatFormActions<ValueNotifier<bool>>(
+          get: (e) => e.value,
+          validate: (e) => e.value,
+          update: (key, e, newValue) => e.value = newValue,
+          clear: (e, key) => e.value = false,
+        ),
+      const (TextEditingController) => BixatFormActions<TextEditingController>(
+          get: (e) => e.text,
+          validate: (e) => e.text.isNotEmpty,
+          update: (key, e, value) => e.text = value,
+          clear: (e, key) => e.clear(),
+        ),
+      _ => null,
     };
     return result;
-  }
-
-  @override
-  MapEntry<String, dynamic> getData(String key, value) {
-    final result = switch (value.runtimeType) {
-      const (TextEditingController) => value.text,
-      const (ValueNotifier<bool>) => value.value,
-      _ => value,
-    };
-    return MapEntry(key, result);
   }
 }
