@@ -22,75 +22,8 @@ dependencies:
 
 ## Usage
 
-Here's a basic example of how to use BixatForm:
+check basic [example](./example/lib/main.dart) of how to use BixatForm
 
-```dart
-import 'package:bixat_form/bixat_form.dart';
-import 'package:flutter/material.dart';
-
-class MyForm extends BixatForm {
-  TextEditingController get usernameField =>
-      put('username', TextEditingController());
-
-  TextEditingController get passwordField =>
-      put('password', TextEditingController());
-
-  @override
-  List<String> get optionalFields => ['terms_accepted'];
-
-  @override
-  bool onValidate(dynamic e) {
-    if (e == null) return false;
-    final bool result = switch (e.runtimeType) {
-      TextEditingController => e.text.isNotEmpty,
-      _ => true,
-    };
-    return result;
-  }
-}
-
-class LoginFormUI extends StatelessWidget {
-  final bixatForm = MyForm();
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Login Form')),
-      body: Padding(
-        padding: EdgeInsets.all(16),
-        child: Column(
-          children: [
-            TextFormField(
-              controller: bixatForm.usernameField,
-              decoration: InputDecoration(labelText: 'Username'),
-              onChanged: (_) => bixatForm.validate(),
-            ),
-            SizedBox(height: 16),
-            TextFormField(
-              controller: bixatForm.passwordField,
-              obscureText: true,
-              decoration: InputDecoration(labelText: 'Password'),
-              onChanged: (_) => bixatForm.validate(),
-            ),
-            SizedBox(height: 16),
-            ValueListenableBuilder(
-              valueListenable: bixatForm.state,
-              builder: (context, state, __) {
-                return ElevatedButton(
-                  onPressed: state == BixatFormState.disabled ? null : bixatForm.submit,
-                  child: Text(state == BixatFormState.loading
-                      ? 'Loading...'
-                      : 'Login'),
-                );
-              },
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-```
 
 ## Customization
 
