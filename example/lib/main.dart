@@ -126,4 +126,4 @@ class _LoginFormUIState extends State<LoginFormUI> {
   }
 }
 
-void main() => runApp(MaterialApp(home: LoginFormUI()));
+void main() => runApp(const MaterialApp(home: LoginFormUI()));
