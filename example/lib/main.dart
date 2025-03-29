@@ -3,10 +3,28 @@ import 'package:flutter/material.dart';
 
 import 'controller.dart';
 
-class LoginFormUI extends StatelessWidget {
+class LoginFormUI extends StatefulWidget {
+  const LoginFormUI({super.key});
+
+  @override
+  State<LoginFormUI> createState() => _LoginFormUIState();
+}
+
+class _LoginFormUIState extends State<LoginFormUI> {
   final bixatForm = BixatController();
 
-  LoginFormUI({super.key});
+  @override
+  void initState() {
+    bixatForm.setData({
+      "username": "m97chahboun",
+      "full_name": "Mohammed",
+      "password": "@@@@@@@@@@",
+      "get_updates_accepted": true,
+      "terms_accepted": false
+    });
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,14 +43,18 @@ class LoginFormUI extends StatelessWidget {
                     controller: bixatForm.usernameField,
                     decoration: const InputDecoration(
                         labelText: 'Username', border: OutlineInputBorder()),
-                    onChanged: bixatForm.onChanged,
+                    onChanged: (e) {
+                      bixatForm.rebuild();
+                    },
                   ),
                   const SizedBox(height: 16),
                   TextFormField(
                     controller: bixatForm.fullNameField,
                     decoration: const InputDecoration(
                         labelText: 'Full name', border: OutlineInputBorder()),
-                    onChanged: bixatForm.onChanged,
+                    onChanged: (e) {
+                      bixatForm.rebuild();
+                    },
                   ),
                   const SizedBox(height: 16),
                   TextFormField(
@@ -40,7 +62,9 @@ class LoginFormUI extends StatelessWidget {
                     obscureText: true,
                     decoration: const InputDecoration(
                         labelText: 'Password', border: OutlineInputBorder()),
-                    onChanged: bixatForm.onChanged,
+                    onChanged: (e) {
+                      bixatForm.rebuild();
+                    },
                   ),
                   const SizedBox(height: 16),
                   ListenableBuilder(
@@ -51,7 +75,7 @@ class LoginFormUI extends StatelessWidget {
                         value: bixatForm.getUpdatesField.value,
                         onChanged: (newValue) {
                           bixatForm.getUpdatesField.value = newValue!;
-                          bixatForm.onChanged(newValue);
+                          bixatForm.rebuild();
                         },
                       );
                     },
@@ -65,23 +89,32 @@ class LoginFormUI extends StatelessWidget {
                         value: bixatForm.termsAcceptedField.value,
                         onChanged: (newValue) {
                           bixatForm.termsAcceptedField.value = newValue!;
-                          bixatForm.onChanged(newValue);
+                          bixatForm.rebuild();
                         },
                       );
                     },
                   ),
                   const SizedBox(height: 16),
-                  ValueListenableBuilder(
-                    valueListenable: bixatForm.state,
-                    builder: (context, _, __) {
-                      return ElevatedButton(
-                        onPressed: bixatForm.disabled ? null : bixatForm.submit,
-                        child: Text(
-                            bixatForm.state.value == BixatFormState.loading
-                                ? 'Loading...'
-                                : 'Register'),
-                      );
-                    },
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      TextButton(
+                          onPressed: bixatForm.clearData,
+                          child: const Text("Clear fields")),
+                      ValueListenableBuilder(
+                        valueListenable: bixatForm.state,
+                        builder: (context, _, __) {
+                          return ElevatedButton(
+                            onPressed:
+                                bixatForm.disabled ? null : bixatForm.submit,
+                            child: Text(
+                                bixatForm.state.value == BixatFormState.loading
+                                    ? 'Loading...'
+                                    : 'Register'),
+                          );
+                        },
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -93,4 +126,4 @@ class LoginFormUI extends StatelessWidget {
   }
 }
 
-void main() => runApp(MaterialApp(home: LoginFormUI()));
+void main() => runApp(const MaterialApp(home: LoginFormUI()));
